@@ -50,21 +50,24 @@ public class ControllerServlet extends HttpServlet {
 
 		try {
 			switch(action) {
-				case "/admin":
-					 showBookAdmin(request, response);
-           break;
-			  case "/new":
-					showNewForm(request, response);
-          break;
-				case "/insert":
-					insertBook(request, response);
-		  break;
-		  case "/delete":
-					deleteBook(request, response);
-          break;
-        default:
-				   listBooks(request, response);
-           break;
+			case "/admin":
+				showBookAdmin(request, response);
+				break;
+			case "/new":
+				showNewForm(request, response);
+				break;
+			case "/insert":
+				insertBook(request, response);
+				break;
+			case "/delete":
+				deleteBook(request, response);
+				break;
+			case "/edit":
+				showEditForm(request, response);
+				break;
+			default:
+				listBooks(request, response);
+				break;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -113,6 +116,14 @@ public class ControllerServlet extends HttpServlet {
 		bookDAO.deleteBook(id);
 
 		response.sendRedirect("list");
+	}
+
+	private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int id = Integer.parseInt(request.getParameter("id"));
+		Book existingBook = bookDAO.getBook(id);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/BookForm.jsp");
+		request.setAttribute("book", existingBook);
+		dispatcher.forward(request, response);
 	}
 
 	/**
